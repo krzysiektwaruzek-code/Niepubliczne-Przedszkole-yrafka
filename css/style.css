@@ -187,3 +187,6 @@ h3{font-size:1.2rem;letter-spacing:-.01em}
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .js .reveal{opacity:1;transform:none}
 }
+
+.about{max-width:680px;margin:0;font-size:clamp(1.1rem,2.4vw,1.35rem);line-height:1.7;color:var(--plum)}
+.about a{font-weight:700}
