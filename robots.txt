@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO: po wdrożeniu dopisz adres mapy witryny, np.:
+# Sitemap: https://TWOJA-DOMENA.pl/sitemap.xml
