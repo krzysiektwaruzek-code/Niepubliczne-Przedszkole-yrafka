@@ -6,7 +6,7 @@ Statyczna strona HTML/CSS/JS (bez buildu), gotowa do wgrania na Hostinger (`publ
 Nazwa, rodzaj placówki (niepubliczne przedszkole), adres: ul. Maratońska 57a, 94-102 Łódź (Polesie).
 
 ## Do uzupełnienia (celowo nie wpisane – brak potwierdzenia)
-Szukaj komentarzy `TODO` w `index.html`:
+Wyniki researchu: `docs/RESEARCH.md`. Szukaj komentarzy `TODO` w `index.html`:
 - telefon, e-mail, godziny otwarcia (wraz z JSON-LD: `telephone`, `openingHoursSpecification`),
 - opis placówki, oferta, opłaty, rekrutacja, prawdziwe zdjęcia i logo,
 - polityka prywatności (link przy zgodzie w formularzu),

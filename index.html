@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Niepubliczne Przedszkole Żyrafka – Łódź, ul. Maratońska 57a</title>
   <meta name="description" content="Niepubliczne Przedszkole Żyrafka w Łodzi (Polesie), ul. Maratońska 57a, 94-102 Łódź. Sprawdź lokalizację i dane placówki.">
-  <meta name="theme-color" content="#1f4d3a">
+  <meta name="theme-color" content="#1d0d38">
   <!-- TODO: po ustaleniu domeny odkomentuj i uzupełnij canonical oraz adresy og:url / og:image -->
   <!-- <link rel="canonical" href="https://TWOJA-DOMENA.pl/"> -->
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -58,8 +58,14 @@
 
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero__bg" aria-hidden="true">
-        <i class="spot s1"></i><i class="spot s2"></i><i class="spot s3"></i><i class="spot s4"></i><i class="spot s5"></i>
+      <div class="bg" aria-hidden="true">
+        <div class="patch"></div>
+        <div class="blob a"></div><div class="blob b"></div>
+        <div class="big float c"></div>
+        <div class="dots"></div>
+        <div class="ring float b"></div>
+        <div class="cloud c1 drift"></div><div class="cloud c2 drift"></div>
+        <i class="star s1 twinkle"></i><i class="star s2 twinkle b"></i><i class="star s3 twinkle c"></i><i class="star s4 twinkle b"></i><i class="star s5 twinkle"></i>
       </div>
       <div class="wrap hero__in">
         <p class="eyebrow reveal">Przedszkole niepubliczne · Łódź, Polesie</p>
@@ -70,47 +76,56 @@
           <a class="btn btn--ghost" href="#lokalizacja">Zobacz lokalizację</a>
         </div>
       </div>
+      <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70c120 40 240 50 360 30 180-30 300-90 480-70 200 22 320 80 600 30v100H0z"/></svg>
     </section>
 
-    <section class="section" id="o-placowce" aria-labelledby="o-title">
+    <section class="section section--cream" id="o-placowce" aria-labelledby="o-title">
+      <div class="bg" aria-hidden="true"><div class="patch"></div><div class="blob"></div><div class="dots"></div></div>
       <div class="wrap">
         <header class="section__head reveal">
           <p class="eyebrow">Informacje</p>
           <h2 id="o-title">O placówce</h2>
         </header>
-        <div class="cards">
+        <div class="facts">
           <article class="card reveal">
+            <span class="card__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6v10H3z"/><path d="M9 20v-6h6v6"/></svg></span>
             <h3>Rodzaj placówki</h3>
             <p>Przedszkole niepubliczne.</p>
           </article>
           <article class="card reveal">
+            <span class="card__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
             <h3>Adres</h3>
             <address>ul. Maratońska 57a<br>94-102 Łódź</address>
           </article>
           <article class="card reveal">
+            <span class="card__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l6-4v16"/><path d="M9 21V11l6-3v13"/><path d="M15 21V13l6-2v10"/></svg></span>
             <h3>Dzielnica</h3>
             <p>Łódź-Polesie.</p>
+          </article>
+          <article class="card reveal">
+            <span class="card__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg></span>
+            <h3>Zapisy i informacje</h3>
+            <p>Napisz do nas przez formularz poniżej.</p>
           </article>
         </div>
         <!--
           TODO (po otrzymaniu danych od placówki) – dodaj tutaj kolejne karty/sekcje, np.:
-          - opis placówki i koncepcja pracy,
-          - oferta, zajęcia, wyżywienie, opłaty,
-          - godziny otwarcia,
-          - rekrutacja,
-          - galeria prawdziwych zdjęć (assets/…),
+          opis placówki i koncepcja pracy, oferta i zajęcia, wyżywienie, opłaty,
+          godziny otwarcia, zasady rekrutacji, galeria prawdziwych zdjęć (assets/…).
           Nie publikuj niczego, czego placówka nie potwierdziła.
+          Zob. docs/RESEARCH.md – lista danych znalezionych w sieci i wymagających weryfikacji.
         -->
       </div>
     </section>
 
-    <section class="section section--tint" id="lokalizacja" aria-labelledby="loc-title">
+    <section class="section section--sky" id="lokalizacja" aria-labelledby="loc-title">
+      <div class="bg" aria-hidden="true"><div class="patch"></div><div class="blob"></div><div class="dots"></div></div>
       <div class="wrap loc">
         <div class="loc__text reveal">
           <p class="eyebrow">Jak dojechać</p>
           <h2 id="loc-title">Lokalizacja</h2>
           <address>Niepubliczne Przedszkole Żyrafka<br>ul. Maratońska 57a<br>94-102 Łódź</address>
-          <a class="btn" target="_blank" rel="noopener"
+          <a class="btn btn--dark" target="_blank" rel="noopener"
              href="https://www.google.com/maps/dir/?api=1&amp;destination=Marato%C5%84ska+57a%2C+94-102+%C5%81%C3%B3d%C5%BA">Wyznacz trasę<span class="sr"> (otworzy się w nowej karcie)</span></a>
         </div>
         <div class="loc__map reveal">
@@ -120,13 +135,14 @@
       </div>
     </section>
 
-    <section class="section" id="kontakt" aria-labelledby="k-title">
+    <section class="section section--pink" id="kontakt" aria-labelledby="k-title">
+      <div class="bg" aria-hidden="true"><div class="patch"></div><div class="blob"></div><div class="ring float"></div></div>
       <div class="wrap contact">
         <div class="reveal">
           <p class="eyebrow">Kontakt</p>
           <h2 id="k-title">Napisz do nas</h2>
           <p class="muted">Dane kontaktowe (telefon, e-mail, godziny otwarcia) zostaną uzupełnione po potwierdzeniu z placówką.</p>
-          <!-- TODO: tutaj dodaj telefon (<a href="tel:+48…">) i e-mail po potwierdzeniu; uzupełnij też JSON-LD (telephone, openingHoursSpecification). -->
+          <!-- TODO: dodaj telefon (<a href="tel:+48…">) i e-mail po potwierdzeniu; uzupełnij też JSON-LD (telephone, openingHoursSpecification). -->
         </div>
         <form class="form reveal" id="contact-form" novalidate data-endpoint="">
           <!-- TODO: wpisz w data-endpoint adres usługi odbierającej formularze (np. Formspree / własny backend) -->
@@ -154,6 +170,7 @@
   </main>
 
   <footer class="footer">
+    <div class="bg" aria-hidden="true"><div class="patch"></div></div>
     <div class="wrap footer__in">
       <p><strong>Niepubliczne Przedszkole Żyrafka</strong><br>ul. Maratońska 57a, 94-102 Łódź</p>
       <p class="muted">© <span id="year">2026</span> Niepubliczne Przedszkole Żyrafka</p>
