@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generuje statyczne podstrony z jednego szablonu. Uruchom: python3 tools/build.py
 Treści do uzupełnienia edytuj w słowniku PAGES poniżej (kafelki TODO)."""
-import os, shutil
+import os, shutil, hashlib
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NAME = "Niepubliczne Przedszkole Żyrafka"
 ADDR = "ul. Maratońska 57a, 94-102 Łódź"
@@ -12,11 +12,11 @@ NAV = [("", "Start"), ("o-nas", "O nas"), ("kadra", "Kadra"), ("placowka", "Plac
        ("cennik", "Cennik"), ("rekrutacja", "Rekrutacja"), ("opinie", "Opinie"), ("galeria", "Galeria")]
 
 # ---------- ozdoby tła (SVG) ----------
-SUN = ('<svg class="d-svg sun spin" viewBox="0 0 120 120" aria-hidden="true"><g stroke="#ffc93c" stroke-width="7" stroke-linecap="round">'
+SUN = ('<svg class="d-svg sun spin" width="150" height="150" viewBox="0 0 120 120" aria-hidden="true"><g stroke="#ffc93c" stroke-width="7" stroke-linecap="round">'
        + "".join(f'<line x1="60" y1="6" x2="60" y2="20" transform="rotate({a} 60 60)"/>' for a in range(0, 360, 30))
        + '</g><circle cx="60" cy="60" r="29" fill="#ffd45e"/><circle cx="52" cy="52" r="9" fill="#ffe7a0" opacity=".8"/></svg>')
 def cloud(cls):
-    return (f'<svg class="d-svg {cls} drift" viewBox="0 0 200 90" aria-hidden="true"><path fill="#fff" d="M40 80a30 30 0 010-60 40 40 0 0176-8 34 34 0 0136 26 27 27 0 01-4 42z"/></svg>')
+    return (f'<svg class="d-svg {cls} drift" width="160" height="72" viewBox="0 0 200 90" aria-hidden="true"><path fill="#fff" d="M40 80a30 30 0 010-60 40 40 0 0176-8 34 34 0 0136 26 27 27 0 01-4 42z"/></svg>')
 HILLS = ('<svg class="hills" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">'
          '<path class="h1" d="M0 120c180-70 360-70 540-20s360 60 540-10 270-40 360 0v130H0z"/>'
          '<path class="h2" d="M0 160c200-60 380-40 560 0s340 40 520-10 240-20 360 10v70H0z"/>'
@@ -163,6 +163,7 @@ PAGES["kontakt"] = dict(
 
 def url_of(slug): return "/" if slug == "" else f"/{slug}/"
 
+VER = ""
 def render(slug, p):
     R = "" if slug == "" else "../"
     nav = "".join(f'<a href="{R}{s}{"/" if s else ""}"' + (' aria-current="page"' if s == slug else "") + f'>{t}</a>' for s, t in NAV)
@@ -182,7 +183,7 @@ def render(slug, p):
   <meta property="og:type" content="website"><meta property="og:locale" content="pl_PL">
   <meta property="og:title" content="{p["title"]}"><meta property="og:description" content="{p["desc"]}">
   <meta name="twitter:card" content="summary"><meta name="twitter:title" content="{p["title"]}"><meta name="twitter:description" content="{p["desc"]}">
-  <link rel="stylesheet" href="{R}css/style.css">
+  <link rel="stylesheet" href="{R}css/style.css?v={VER}">
   {LD if p.get("ld") else ""}
 </head>
 <body>
@@ -203,15 +204,17 @@ def render(slug, p):
     </div>
     <p class="footer__bar">© <span id="year">2026</span> {NAME}</p>
   </div></footer>
-  <script src="{R}js/main.js" defer></script>
+  <script src="{R}js/main.js?v={VER}" defer></script>
 </body>
 </html>
 '''
 
 def main():
+    global VER
     spots = open(os.path.join(ROOT, "tools/spots.txt")).read().strip()
     css = open(os.path.join(ROOT, "tools/style.template.css"), encoding="utf-8").read().replace("%%SPOTS%%", spots)
     open(os.path.join(ROOT, "css/style.css"), "w", encoding="utf-8").write(css)
+    VER = hashlib.md5((css + open(os.path.join(ROOT, "js/main.js"), encoding="utf-8").read()).encode()).hexdigest()[:8]
     for slug, p in PAGES.items():
         d = os.path.join(ROOT, slug) if slug else ROOT
         os.makedirs(d, exist_ok=True)
