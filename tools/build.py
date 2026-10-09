@@ -32,7 +32,7 @@ def sec_bg(blob="b-white", pos="pos-tl", dots="pos-br"):
     return f'<div class="bg" aria-hidden="true"><div class="blob {blob} {pos}"></div>{acc}</div>'
 
 # ---------- klocki ----------
-def todo(title, hint="Treść zostanie dodana po otrzymaniu informacji od placówki."):
+def todo(title, hint):
     return (f'<article class="tile tile--todo reveal"><span class="badge">Do uzupełnienia</span>'
             f'<h3>{title}</h3><p>{hint}</p></article>')
 def link(title, text, href):
@@ -49,7 +49,7 @@ def phero(slug, title, lead):
     return (f'<section class="phero">{HERO_BG}<div class="wrap hero__in">'
             f'<p class="crumbs reveal"><a href="../">Start</a> / {cur}</p>'
             f'<h1 class="reveal">{title}</h1><p class="lead reveal">{lead}</p></div>{HILLS}</section>')
-CTA_CONTACT = section("s-plum", '<div class="cta reveal"><div><h2>Masz pytania?</h2><p class="lead" style="margin:.4rem 0 0">Napisz do nas – odpowiemy po otrzymaniu wiadomości.</p></div><a class="btn" href="{R}kontakt/">Umów spotkanie</a></div>',
+CTA_CONTACT = section("s-plum", '<div class="cta reveal"><div><h2>Masz pytania?</h2><p class="lead" style="margin:.4rem 0 0">Napisz do nas lub umów spotkanie.</p></div><a class="btn" href="{R}kontakt/">Umów spotkanie</a></div>',
                       sec_bg("b-pink", "pos-br", "pos-tl"))
 MAP = lambda: (f'<div class="loc__map reveal" data-map="https://www.google.com/maps?q={MAPQ}&amp;output=embed"><div class="map-ph">'
                '<p><strong>Mapa Google</strong><br>Mapa wczytuje się po kliknięciu – wtedy Twoje dane trafiają do Google.</p>'
@@ -70,11 +70,10 @@ LD = '''<script type="application/ld+json">
 
 # ---------- treść podstron ----------
 CC = lambda R: CTA_CONTACT.replace("{R}", R)
-def todo_page(slug, title, lead, eyebrow, h2, tiles, bgcls="s-sky", intro="", noindex=True, blob="b-white"):
-    return dict(title=f"{title} – {NAME}", desc=f"{title} – {NAME}, Łódź, ul. Maratońska 57a.", noindex=noindex,
+def todo_page(slug, title, lead, eyebrow, h2, tiles, bgcls="s-sky", blob="b-white"):
+    return dict(title=f"{title} – {NAME}", desc=f"{title} – {NAME}, Łódź, ul. Maratońska 57a.", noindex=True,
       body=lambda R: (phero(slug, title, lead)
-        + section(bgcls, head(eyebrow, h2) + (f'<p class="about reveal" style="margin-bottom:1.8rem">{intro}</p>' if intro else "")
-                  + '<div class="tiles" data-stagger>' + "".join(todo(t) if isinstance(t, str) else todo(*t) for t in tiles) + '</div>',
+        + section(bgcls, head(eyebrow, h2) + '<div class="tiles" data-stagger>' + "".join(todo(*t) for t in tiles) + '</div>',
                   sec_bg(blob, "pos-tl", "pos-br"))
         + CC(R)))
 
@@ -98,12 +97,15 @@ PAGES[""] = dict(
         sec_bg("b-sun", "pos-br", "pos-tl"))
     + section("s-sky", head("Witamy", "Przedszkole w sercu Polesia") +
         '<p class="about reveal">Niepubliczne Przedszkole Żyrafka to przedszkole niepubliczne w Łodzi, w dzielnicy Polesie, przy ul. Maratońskiej 57a.</p>'
-        '<div class="tiles" style="margin-top:2rem" data-stagger>' + todo("Kilka słów o nas", "Krótki opis placówki zostanie dodany po otrzymaniu informacji od przedszkola.")
-        + todo("Godziny otwarcia") + todo("Telefon i e-mail") + '</div>', sec_bg("b-white", "pos-tl", "pos-br"))
+        '<div class="tiles" style="margin-top:2rem" data-stagger>'
+        + todo("Kilka słów o nas", "Krótki opis przedszkola: kim jesteśmy i czym się wyróżniamy.")
+        + todo("Godziny otwarcia", "Dni i godziny, w których przedszkole jest otwarte.")
+        + todo("Telefon i e-mail", "Numer telefonu i adres e-mail do kontaktu.") + '</div>', sec_bg("b-white", "pos-tl", "pos-br"))
     + section("s-mint", head("Dla rodziców", "Najczęstsze pytania") +
-        '<div class="tiles" data-stagger>' + todo("Ile kosztuje przedszkole?", "Informacje o opłatach pojawią się w zakładce Cennik.")
-        + todo("Jak wygląda dzień dziecka?", "Opis rytmu dnia pojawi się w zakładce Program.")
-        + todo("Jak zapisać dziecko?", "Zasady zapisów pojawią się w zakładce Rekrutacja.") + '</div>', sec_bg("b-sky", "pos-br", "pos-tl"))
+        '<div class="tiles" data-stagger>'
+        + todo("Ile kosztuje przedszkole?", "Krótka odpowiedź o opłatach i odnośnik do cennika.")
+        + todo("Jak wygląda dzień dziecka?", "Krótki opis rytmu dnia i odnośnik do programu.")
+        + todo("Jak zapisać dziecko?", "Krótki opis zapisów i odnośnik do rekrutacji.") + '</div>', sec_bg("b-sky", "pos-br", "pos-tl"))
     + section("s-peach", '<div class="loc"><div class="reveal"><p class="eyebrow">Jak dojechać</p><h2>Lokalizacja</h2>'
         f'<address>{NAME}<br>ul. Maratońska 57a<br>94-102 Łódź</address>'
         f'<a class="btn btn--dark" target="_blank" rel="noopener" href="{DIR}">Wyznacz trasę<span class="sr"> (nowa karta)</span></a></div>{MAP()}</div>',
@@ -113,17 +115,23 @@ PAGES[""] = dict(
 PAGES["o-nas"] = dict(
   title=f"O nas – {NAME}", desc="Informacje o Niepublicznym Przedszkolu Żyrafka w Łodzi na Polesiu, ul. Maratońska 57a.",
   body=lambda R: (phero("o-nas", "O nas", "Przedszkole niepubliczne w Łodzi, na Polesiu.")
-    + section("s-cream", '<div class="split"><div>' + head("Podstawowe informacje", "Nasza placówka") +
-        '<p class="about reveal">Poniżej znajdziesz potwierdzone dane o przedszkolu. Pozostałe sekcje uzupełnimy wspólnie z placówką.</p></div>'
+    + section("s-cream", '<div class="split"><div>' + head("Podstawowe informacje", "Nasza placówka") + '</div>'
         f'<div class="factbox reveal"><dl><dt>Nazwa</dt><dd>{NAME}</dd><dt>Rodzaj</dt><dd>Przedszkole niepubliczne</dd><dt>Adres</dt><dd>ul. Maratońska 57a, 94-102 Łódź</dd><dt>Dzielnica</dt><dd>Łódź-Polesie</dd></dl></div></div>',
         sec_bg("b-sun", "pos-br", "pos-tl"))
-    + section("s-lilac", head("Więcej o nas", "Do uzupełnienia") +
-        '<div class="tiles" data-stagger>' + todo("Misja i wartości") + todo("Nasze podejście do dzieci") + todo("Historia przedszkola") + todo("Grupy wiekowe") + '</div>',
+    + section("s-lilac", head("Poznaj nas", "Więcej o przedszkolu") +
+        '<div class="tiles" data-stagger>'
+        + todo("Misja i wartości", "Czym kieruje się przedszkole w pracy z dziećmi.")
+        + todo("Nasze podejście do dzieci", "Opis metody pracy i atmosfery w grupach.")
+        + todo("Historia przedszkola", "Kiedy i jak powstało przedszkole.")
+        + todo("Grupy wiekowe", "Liczba grup i wiek dzieci w poszczególnych grupach.") + '</div>',
         sec_bg("b-white", "pos-tl", "pos-br"))
     + CC(R)))
-PAGES["kadra"] = todo_page("kadra", "Kadra", "Osoby, które opiekują się Twoim dzieckiem.", "Zespół", "Poznaj naszą kadrę",
-    ["Dyrektor", "Nauczyciele", "Opiekunowie", "Specjaliści i terapeuci", "Pozostały personel"],
-    intro="Przedstawimy tu zespół po otrzymaniu informacji i zgód od placówki.", bgcls="s-peach")
+PAGES["kadra"] = todo_page("kadra", "Kadra", "Osoby, które opiekują się Twoim dzieckiem.", "Zespół", "Poznaj naszą kadrę", [
+    ("Dyrektor", "Imię, nazwisko i krótka informacja o dyrektorze."),
+    ("Nauczyciele", "Imiona, nazwiska i kwalifikacje nauczycieli."),
+    ("Opiekunowie", "Osoby opiekujące się dziećmi w grupach."),
+    ("Specjaliści", "Specjaliści pracujący z dziećmi, jeśli są w zespole."),
+    ("Pozostały personel", "Pozostałe osoby pracujące w przedszkolu.")], bgcls="s-peach")
 PAGES["placowka"] = dict(
   title=f"Placówka – {NAME}", desc="Adres, lokalizacja i dojazd do Niepublicznego Przedszkola Żyrafka, ul. Maratońska 57a, Łódź.",
   body=lambda R: (phero("placowka", "Placówka", "Gdzie jesteśmy i jak do nas trafić.")
@@ -131,24 +139,42 @@ PAGES["placowka"] = dict(
         f'<address>{NAME}<br>ul. Maratońska 57a<br>94-102 Łódź (Polesie)</address>'
         f'<a class="btn btn--dark" target="_blank" rel="noopener" href="{DIR}">Wyznacz trasę<span class="sr"> (nowa karta)</span></a></div>{MAP()}</div>',
         sec_bg("b-white", "pos-tl", "pos-br"))
-    + section("s-mint", head("Miejsce", "Do uzupełnienia") +
-        '<div class="tiles" data-stagger>' + todo("Sale i wyposażenie") + todo("Ogród i plac zabaw") + todo("Bezpieczeństwo") + todo("Parking i komunikacja miejska") + '</div>',
+    + section("s-mint", head("Miejsce", "Budynek i okolica") +
+        '<div class="tiles" data-stagger>'
+        + todo("Sale i wyposażenie", "Opis sal, zabawek i wyposażenia.")
+        + todo("Ogród i plac zabaw", "Opis terenu na świeżym powietrzu.")
+        + todo("Bezpieczeństwo", "Zasady bezpieczeństwa i odbioru dzieci.")
+        + todo("Parking i komunikacja", "Jak dojechać samochodem lub komunikacją miejską.") + '</div>',
         sec_bg("b-sky", "pos-br", "pos-tl"))
     + CC(R)))
-PAGES["program"] = todo_page("program", "Program", "Jak wygląda dzień i nauka w przedszkolu.", "Edukacja", "Do uzupełnienia",
-    ["Program wychowania przedszkolnego", "Rytm dnia", "Zajęcia dodatkowe", "Wyżywienie", "Języki obce", "Wycieczki i wydarzenia"], bgcls="s-lilac")
-PAGES["cennik"] = todo_page("cennik", "Cennik", "Opłaty za pobyt dziecka w przedszkolu.", "Opłaty", "Do uzupełnienia",
-    ["Czesne", "Opłata wpisowa", "Wyżywienie", "Godziny dodatkowe", "Rabaty i zniżki"], bgcls="s-cream",
-    intro="Cennik zostanie opublikowany dopiero po przekazaniu go przez placówkę.", blob="b-sun")
-PAGES["rekrutacja"] = todo_page("rekrutacja", "Rekrutacja", "Chcesz zapisać dziecko? Zapytaj o szczegóły.", "Zapisy", "Do uzupełnienia",
-    ["Zasady przyjęć", "Terminy", "Wymagane dokumenty", "Dokumenty do pobrania", "Dzień adaptacyjny"], bgcls="s-mint", blob="b-sky")
-PAGES["opinie"] = todo_page("opinie", "Opinie", "Co mówią rodzice.", "Rodzice", "Do uzupełnienia",
-    [("Opinie rodziców", "Opublikujemy wyłącznie prawdziwe opinie, po uzyskaniu zgody ich autorów."), "Podziękowania", "Dodaj swoją opinię"], bgcls="s-peach")
+PAGES["program"] = todo_page("program", "Program", "Jak wygląda dzień i nauka w przedszkolu.", "Edukacja", "Edukacja i codzienność", [
+    ("Program wychowania przedszkolnego", "Opis realizowanego programu."),
+    ("Rytm dnia", "Plan dnia: przyjście, zajęcia, posiłki, odpoczynek."),
+    ("Zajęcia dodatkowe", "Lista zajęć dodatkowych i ich terminy."),
+    ("Wyżywienie", "Opis posiłków i informacja o dietach."),
+    ("Języki obce", "Informacja o nauce języków."),
+    ("Wycieczki i wydarzenia", "Wyjścia, uroczystości i wydarzenia w przedszkolu.")], bgcls="s-lilac")
+PAGES["cennik"] = todo_page("cennik", "Cennik", "Opłaty za pobyt dziecka w przedszkolu.", "Opłaty", "Opłaty za pobyt", [
+    ("Czesne", "Miesięczna opłata za pobyt dziecka."),
+    ("Opłata wpisowa", "Jednorazowa opłata przy zapisie, jeśli występuje."),
+    ("Wyżywienie", "Dzienna stawka za posiłki."),
+    ("Godziny dodatkowe", "Opłata za pobyt poza podstawowymi godzinami."),
+    ("Rabaty i zniżki", "Zasady zniżek, jeśli są oferowane.")], bgcls="s-cream", blob="b-sun")
+PAGES["rekrutacja"] = todo_page("rekrutacja", "Rekrutacja", "Chcesz zapisać dziecko? Zapytaj o szczegóły.", "Zapisy", "Jak zapisać dziecko", [
+    ("Zasady przyjęć", "Kto i na jakich zasadach może zostać przyjęty."),
+    ("Terminy", "Terminy składania dokumentów i zapisów."),
+    ("Wymagane dokumenty", "Lista dokumentów potrzebnych do zapisu."),
+    ("Dokumenty do pobrania", "Formularze i umowy w wersji do pobrania."),
+    ("Dzień adaptacyjny", "Informacja o adaptacji dziecka w przedszkolu.")], bgcls="s-mint", blob="b-sky")
+PAGES["opinie"] = todo_page("opinie", "Opinie", "Co mówią rodzice.", "Rodzice", "Opinie rodziców", [
+    ("Opinie rodziców", "Prawdziwe opinie rodziców o przedszkolu."),
+    ("Podziękowania", "Podziękowania od rodziców i dzieci."),
+    ("Dodaj swoją opinię", "Sposób przekazania opinii przedszkolu.")], bgcls="s-peach")
 PAGES["galeria"] = dict(
   title=f"Galeria – {NAME}", desc="Galeria zdjęć Niepublicznego Przedszkola Żyrafka w Łodzi.", noindex=True,
   body=lambda R: (phero("galeria", "Galeria", "Zdjęcia z życia przedszkola.")
-    + section("s-sky", head("Zdjęcia", "Miejsce na prawdziwe zdjęcia") +
-        '<p class="about reveal" style="margin-bottom:1.8rem">Dodamy tu zdjęcia, gdy przedszkole je dostarczy.</p><div class="gal" data-stagger>' + "".join(shot(i) for i in range(1, 9)) + '</div>',
+    + section("s-sky", head("Zdjęcia", "Z życia przedszkola") +
+        '<div class="gal" data-stagger>' + "".join(shot(i) for i in range(1, 9)) + '</div>',
         sec_bg("b-white", "pos-tl", "pos-br"))
     + CC(R)))
 PAGES["kontakt"] = dict(
@@ -156,7 +182,9 @@ PAGES["kontakt"] = dict(
   body=lambda R: (phero("kontakt", "Kontakt", "Umów spotkanie lub odwiedź nas na Polesiu.")
     + section("s-cream", '<div class="contact"><div class="reveal"><p class="eyebrow">Dane</p><h2>Jak się z nami skontaktować</h2>'
         f'<address class="about">{NAME}<br>ul. Maratońska 57a<br>94-102 Łódź</address>'
-        '<div class="stack">' + todo("Telefon").replace("reveal", "") + todo("E-mail").replace("reveal", "") + todo("Godziny otwarcia").replace("reveal", "") + '</div>'
+        '<div class="stack">' + todo("Telefon", "Numer telefonu przedszkola.").replace("reveal", "")
+        + todo("E-mail", "Adres e-mail do kontaktu.").replace("reveal", "")
+        + todo("Godziny otwarcia", "Dni i godziny, w których przedszkole jest otwarte.").replace("reveal", "") + '</div>'
         '<!-- TODO: telefon (<a href="tel:+48…">), e-mail, godziny; uzupełnij też JSON-LD -->'
         f'</div>{FORM}</div>', sec_bg("b-sun", "pos-br", "pos-tl"))
     + section("s-sky", '<div class="loc"><div class="reveal"><p class="eyebrow">Jak dojechać</p><h2>Mapa</h2>'
@@ -201,7 +229,7 @@ def render(slug, p):
     <div class="footer__grid">
       <div><h3>{NAME}</h3><p>ul. Maratońska 57a<br>94-102 Łódź</p></div>
       <div><h3>Strony</h3><ul>{foot_links}</ul></div>
-      <div><h3>Kontakt</h3><p>Dane kontaktowe zostaną uzupełnione.<br><a href="{R}kontakt/">Formularz kontaktowy</a></p></div>
+      <div><h3>Kontakt</h3><p>Telefon i e-mail: do uzupełnienia<br><a href="{R}kontakt/">Formularz kontaktowy</a></p></div>
     </div>
     <p class="footer__bar">© <span id="year">2026</span> {NAME}</p>
   </div></footer>

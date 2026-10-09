@@ -258,3 +258,15 @@ h3{font-size:1.2rem;letter-spacing:-.01em}
 .section .blob{opacity:.4}
 .star.s1{left:46%;top:16%}
 @media (max-width:860px){.acc{display:none}}
+
+/* v6: czytelne, matowe przyciski (bez poświaty i unoszenia) */
+.btn{background:#cf3a27;border-color:#cf3a27;color:#fff;box-shadow:none;transition:background .2s,border-color .2s,color .2s}
+.btn:hover,.btn:active{background:#a92d1d;border-color:#a92d1d;transform:none;box-shadow:none}
+.btn--ghost{background:transparent;color:var(--plum);border-color:var(--plum)}
+.btn--ghost:hover{background:var(--plum);border-color:var(--plum);color:#fff}
+.btn--dark{background:var(--plum);border-color:var(--plum);color:#fff}
+.btn--dark:hover,.btn--dark:active{background:var(--plum-d);border-color:var(--plum-d)}
+.s-plum .btn{background:#fff;border-color:#fff;color:var(--plum)}
+.s-plum .btn:hover{background:var(--lilac);border-color:var(--lilac)}
+.nav .btn{color:#fff}
+.footer .footer__bar{margin-top:2.2rem}
