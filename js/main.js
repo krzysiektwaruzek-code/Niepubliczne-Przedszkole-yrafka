@@ -26,6 +26,17 @@
 
   var y = $('year'); if (y) y.textContent = new Date().getFullYear();
 
+  document.querySelectorAll('[data-map-btn]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var box = btn.closest('[data-map]');
+      var f = document.createElement('iframe');
+      f.title = 'Mapa Google: Maratońska 57a, 94-102 Łódź';
+      f.referrerPolicy = 'no-referrer-when-downgrade';
+      f.src = box.getAttribute('data-map');
+      box.innerHTML = ''; box.appendChild(f);
+    });
+  });
+
   var form = $('contact-form'), status = $('form-status');
   if (!form) return;
   function say(msg, cls) { status.textContent = msg; status.className = 'form__status ' + cls; }

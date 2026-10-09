@@ -8,8 +8,8 @@ ADDR = "ul. Maratońska 57a, 94-102 Łódź"
 MAPQ = "Marato%C5%84ska+57a%2C+94-102+%C5%81%C3%B3d%C5%BA"
 DOMAIN = "https://TWOJA-DOMENA.pl"   # TODO: docelowa domena
 
-NAV = [("", "Start"), ("o-przedszkolu", "O przedszkolu"), ("oferta", "Oferta"),
-       ("rekrutacja", "Rekrutacja"), ("galeria", "Galeria")]
+NAV = [("", "Start"), ("o-nas", "O nas"), ("kadra", "Kadra"), ("placowka", "Placówka"), ("program", "Program"),
+       ("cennik", "Cennik"), ("rekrutacja", "Rekrutacja"), ("opinie", "Opinie"), ("galeria", "Galeria")]
 
 # ---------- ozdoby tła (SVG) ----------
 SUN = ('<svg class="d-svg sun spin" viewBox="0 0 120 120" aria-hidden="true"><g stroke="#ffc93c" stroke-width="7" stroke-linecap="round">'
@@ -47,10 +47,11 @@ def phero(slug, title, lead):
     return (f'<section class="phero">{HERO_BG}<div class="wrap hero__in">'
             f'<p class="crumbs reveal"><a href="../">Start</a> / {cur}</p>'
             f'<h1 class="reveal">{title}</h1><p class="lead reveal">{lead}</p></div>{HILLS}</section>')
-CTA_CONTACT = section("s-plum", '<div class="cta reveal"><div><h2>Masz pytania?</h2><p class="lead" style="margin:.4rem 0 0">Napisz do nas – odpowiemy po otrzymaniu wiadomości.</p></div><a class="btn" href="{R}kontakt/">Przejdź do kontaktu</a></div>',
+CTA_CONTACT = section("s-plum", '<div class="cta reveal"><div><h2>Masz pytania?</h2><p class="lead" style="margin:.4rem 0 0">Napisz do nas – odpowiemy po otrzymaniu wiadomości.</p></div><a class="btn" href="{R}kontakt/">Umów spotkanie</a></div>',
                       sec_bg("b-pink", "pos-br", "pos-tl"))
-MAP = lambda: (f'<div class="loc__map reveal"><iframe title="Mapa Google: Maratońska 57a, 94-102 Łódź" loading="lazy" '
-               f'referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q={MAPQ}&amp;output=embed"></iframe></div>')
+MAP = lambda: (f'<div class="loc__map reveal" data-map="https://www.google.com/maps?q={MAPQ}&amp;output=embed"><div class="map-ph">'
+               '<p><strong>Mapa Google</strong><br>Mapa wczytuje się po kliknięciu – wtedy Twoje dane trafiają do Google.</p>'
+               '<button class="btn btn--dark" type="button" data-map-btn>Załaduj mapę</button></div></div>')
 DIR = f'https://www.google.com/maps/dir/?api=1&amp;destination={MAPQ}'
 FORM = '''<form class="form reveal" id="contact-form" novalidate data-endpoint="">
 <!-- TODO: wpisz w data-endpoint adres usługi odbierającej formularze (np. Formspree / własny backend) -->
@@ -66,73 +67,91 @@ LD = '''<script type="application/ld+json">
 # TODO: do JSON-LD dodaj telephone i openingHoursSpecification dopiero po potwierdzeniu z placówką.
 
 # ---------- treść podstron ----------
+CC = lambda R: CTA_CONTACT.replace("{R}", R)
+def todo_page(slug, title, lead, eyebrow, h2, tiles, bgcls="s-sky", intro="", noindex=True, blob="b-white"):
+    return dict(title=f"{title} – {NAME}", desc=f"{title} – {NAME}, Łódź, ul. Maratońska 57a.", noindex=noindex,
+      body=lambda R: (phero(slug, title, lead)
+        + section(bgcls, head(eyebrow, h2) + (f'<p class="about reveal" style="margin-bottom:1.8rem">{intro}</p>' if intro else "")
+                  + '<div class="tiles" data-stagger>' + "".join(todo(t) if isinstance(t, str) else todo(*t) for t in tiles) + '</div>',
+                  sec_bg(blob, "pos-tl", "pos-br"))
+        + CC(R)))
+
 PAGES = {}
 PAGES[""] = dict(
   title=f"{NAME} – Łódź, ul. Maratońska 57a",
-  desc="Niepubliczne Przedszkole Żyrafka w Łodzi (Polesie), ul. Maratońska 57a, 94-102 Łódź. Poznaj placówkę i skontaktuj się z nami.",
+  desc="Niepubliczne Przedszkole Żyrafka w Łodzi (Polesie), ul. Maratońska 57a, 94-102 Łódź. Poznaj placówkę i umów spotkanie.",
   ld=True, body=lambda R: (
     f'<section class="hero">{HERO_BG}<div class="wrap hero__in">'
     '<p class="eyebrow reveal">Przedszkole niepubliczne · Łódź, Polesie</p>'
     '<h1 class="reveal">Niepubliczne Przedszkole <em>Żyrafka</em></h1>'
-    f'<p class="lead reveal">{ADDR}</p>'
-    f'<div class="hero__cta reveal"><a class="btn" href="{R}kontakt/">Skontaktuj się</a><a class="btn btn--ghost" href="{R}o-przedszkolu/">Poznaj przedszkole</a></div>'
+    f'<p class="lead reveal">Przedszkole niepubliczne w Łodzi, przy ul. Maratońskiej 57a.</p>'
+    f'<div class="hero__cta reveal"><a class="btn" href="{R}kontakt/">Umów spotkanie</a><a class="btn btn--ghost" href="{R}placowka/">Zobacz placówkę</a></div>'
     f'</div>{HILLS}</section>'
-    + section("s-cream", head("Witamy", "Przedszkole w sercu Polesia") +
-        '<p class="about reveal">Niepubliczne Przedszkole Żyrafka to przedszkole niepubliczne w Łodzi, w dzielnicy Polesie, przy ul. Maratońskiej 57a.</p>'
-        '<div class="tiles" style="margin-top:2rem" data-stagger>' + todo("Kilka słów o nas", "Krótki opis placówki zostanie dodany po otrzymaniu informacji od przedszkola.") + '</div>',
+    + section("s-cream", head("Znajdź to, czego szukasz", "Szybkie przejścia") +
+        '<div class="tiles tiles--quick" data-stagger>'
+        + link("O nas", "Kim jesteśmy.", R+"o-nas/") + link("Kadra", "Osoby, które opiekują się dziećmi.", R+"kadra/")
+        + link("Placówka", "Adres, budynek i dojazd.", R+"placowka/") + link("Program", "Zajęcia i rytm dnia.", R+"program/")
+        + link("Cennik", "Opłaty za pobyt.", R+"cennik/") + link("Rekrutacja", "Jak zapisać dziecko.", R+"rekrutacja/")
+        + link("Opinie", "Co mówią rodzice.", R+"opinie/") + link("Galeria", "Zdjęcia z przedszkola.", R+"galeria/") + '</div>',
         sec_bg("b-sun", "pos-br", "pos-tl"))
-    + section("s-sky", head("Poznaj nas", "Wszystko w jednym miejscu") +
-        '<div class="tiles" data-stagger>' + link("O przedszkolu", "Kim jesteśmy i jak pracujemy.", R+"o-przedszkolu/")
-        + link("Oferta", "Zajęcia, wyżywienie i opieka.", R+"oferta/") + link("Rekrutacja", "Jak zapisać dziecko.", R+"rekrutacja/")
-        + link("Galeria", "Zdjęcia z życia przedszkola.", R+"galeria/") + '</div>', sec_bg("b-white", "pos-tl", "pos-br"))
-    + section("s-mint", head("Codzienność", "Dzień w przedszkolu") +
-        '<div class="tiles" data-stagger>' + todo("Godziny otwarcia") + todo("Wyżywienie") + todo("Zajęcia i zabawy") + '</div>',
-        sec_bg("b-sky", "pos-br", "pos-tl"))
+    + section("s-sky", head("Witamy", "Przedszkole w sercu Polesia") +
+        '<p class="about reveal">Niepubliczne Przedszkole Żyrafka to przedszkole niepubliczne w Łodzi, w dzielnicy Polesie, przy ul. Maratońskiej 57a.</p>'
+        '<div class="tiles" style="margin-top:2rem" data-stagger>' + todo("Kilka słów o nas", "Krótki opis placówki zostanie dodany po otrzymaniu informacji od przedszkola.")
+        + todo("Godziny otwarcia") + todo("Telefon i e-mail") + '</div>', sec_bg("b-white", "pos-tl", "pos-br"))
+    + section("s-mint", head("Dla rodziców", "Najczęstsze pytania") +
+        '<div class="tiles" data-stagger>' + todo("Ile kosztuje przedszkole?", "Informacje o opłatach pojawią się w zakładce Cennik.")
+        + todo("Jak wygląda dzień dziecka?", "Opis rytmu dnia pojawi się w zakładce Program.")
+        + todo("Jak zapisać dziecko?", "Zasady zapisów pojawią się w zakładce Rekrutacja.") + '</div>', sec_bg("b-sky", "pos-br", "pos-tl"))
     + section("s-peach", '<div class="loc"><div class="reveal"><p class="eyebrow">Jak dojechać</p><h2>Lokalizacja</h2>'
         f'<address>{NAME}<br>ul. Maratońska 57a<br>94-102 Łódź</address>'
         f'<a class="btn btn--dark" target="_blank" rel="noopener" href="{DIR}">Wyznacz trasę<span class="sr"> (nowa karta)</span></a></div>{MAP()}</div>',
         sec_bg("b-white", "pos-tl", "pos-br"), "lokalizacja")
-    + CTA_CONTACT.replace("{R}", R)))
+    + CC(R)))
 
-PAGES["o-przedszkolu"] = dict(
-  title=f"O przedszkolu – {NAME}", desc="Informacje o Niepublicznym Przedszkolu Żyrafka w Łodzi na Polesiu, ul. Maratońska 57a.",
-  body=lambda R: (phero("o-przedszkolu", "O przedszkolu", "Przedszkole niepubliczne w Łodzi, na Polesiu.")
+PAGES["o-nas"] = dict(
+  title=f"O nas – {NAME}", desc="Informacje o Niepublicznym Przedszkolu Żyrafka w Łodzi na Polesiu, ul. Maratońska 57a.",
+  body=lambda R: (phero("o-nas", "O nas", "Przedszkole niepubliczne w Łodzi, na Polesiu.")
     + section("s-cream", '<div class="split"><div>' + head("Podstawowe informacje", "Nasza placówka") +
-        '<p class="about reveal">Chcemy, aby rodzice mogli dowiedzieć się o przedszkolu wszystkiego, co ważne. Poniżej znajdziesz potwierdzone dane, a pozostałe sekcje uzupełnimy wspólnie z placówką.</p></div>'
+        '<p class="about reveal">Poniżej znajdziesz potwierdzone dane o przedszkolu. Pozostałe sekcje uzupełnimy wspólnie z placówką.</p></div>'
         f'<div class="factbox reveal"><dl><dt>Nazwa</dt><dd>{NAME}</dd><dt>Rodzaj</dt><dd>Przedszkole niepubliczne</dd><dt>Adres</dt><dd>ul. Maratońska 57a, 94-102 Łódź</dd><dt>Dzielnica</dt><dd>Łódź-Polesie</dd></dl></div></div>',
         sec_bg("b-sun", "pos-br", "pos-tl"))
     + section("s-lilac", head("Więcej o nas", "Do uzupełnienia") +
-        '<div class="tiles" data-stagger>' + todo("Misja i koncepcja pracy") + todo("Kadra") + todo("Budynek i ogród") + todo("Grupy wiekowe") + '</div>',
+        '<div class="tiles" data-stagger>' + todo("Misja i wartości") + todo("Nasze podejście do dzieci") + todo("Historia przedszkola") + todo("Grupy wiekowe") + '</div>',
         sec_bg("b-white", "pos-tl", "pos-br"))
-    + CTA_CONTACT.replace("{R}", R)))
-
-PAGES["oferta"] = dict(
-  title=f"Oferta – {NAME}", desc="Oferta Niepublicznego Przedszkola Żyrafka w Łodzi.", noindex=True,
-  body=lambda R: (phero("oferta", "Oferta", "Opieka i edukacja dla Twojego dziecka.")
-    + section("s-sky", head("Co oferujemy", "Do uzupełnienia") +
-        '<div class="tiles" data-stagger>' + todo("Opieka i edukacja") + todo("Zajęcia dodatkowe") + todo("Wyżywienie") + todo("Opłaty") + todo("Godziny pracy") + todo("Dodatkowe usługi") + '</div>',
+    + CC(R)))
+PAGES["kadra"] = todo_page("kadra", "Kadra", "Osoby, które opiekują się Twoim dzieckiem.", "Zespół", "Poznaj naszą kadrę",
+    ["Dyrektor", "Nauczyciele", "Opiekunowie", "Specjaliści i terapeuci", "Pozostały personel"],
+    intro="Przedstawimy tu zespół po otrzymaniu informacji i zgód od placówki.", bgcls="s-peach")
+PAGES["placowka"] = dict(
+  title=f"Placówka – {NAME}", desc="Adres, lokalizacja i dojazd do Niepublicznego Przedszkola Żyrafka, ul. Maratońska 57a, Łódź.",
+  body=lambda R: (phero("placowka", "Placówka", "Gdzie jesteśmy i jak do nas trafić.")
+    + section("s-sky", '<div class="loc"><div class="reveal"><p class="eyebrow">Adres</p><h2>Jak dojechać</h2>'
+        f'<address>{NAME}<br>ul. Maratońska 57a<br>94-102 Łódź (Polesie)</address>'
+        f'<a class="btn btn--dark" target="_blank" rel="noopener" href="{DIR}">Wyznacz trasę<span class="sr"> (nowa karta)</span></a></div>{MAP()}</div>',
         sec_bg("b-white", "pos-tl", "pos-br"))
-    + CTA_CONTACT.replace("{R}", R)))
-
-PAGES["rekrutacja"] = dict(
-  title=f"Rekrutacja – {NAME}", desc="Zapisy do Niepublicznego Przedszkola Żyrafka w Łodzi.", noindex=True,
-  body=lambda R: (phero("rekrutacja", "Rekrutacja", "Chcesz zapisać dziecko? Zapytaj o szczegóły.")
-    + section("s-mint", head("Zapisy", "Do uzupełnienia") +
-        '<div class="tiles" data-stagger>' + todo("Zasady przyjęć") + todo("Terminy") + todo("Wymagane dokumenty") + todo("Dokumenty do pobrania") + '</div>',
+    + section("s-mint", head("Miejsce", "Do uzupełnienia") +
+        '<div class="tiles" data-stagger>' + todo("Sale i wyposażenie") + todo("Ogród i plac zabaw") + todo("Bezpieczeństwo") + todo("Parking i komunikacja miejska") + '</div>',
         sec_bg("b-sky", "pos-br", "pos-tl"))
-    + CTA_CONTACT.replace("{R}", R)))
-
+    + CC(R)))
+PAGES["program"] = todo_page("program", "Program", "Jak wygląda dzień i nauka w przedszkolu.", "Edukacja", "Do uzupełnienia",
+    ["Program wychowania przedszkolnego", "Rytm dnia", "Zajęcia dodatkowe", "Wyżywienie", "Języki obce", "Wycieczki i wydarzenia"], bgcls="s-lilac")
+PAGES["cennik"] = todo_page("cennik", "Cennik", "Opłaty za pobyt dziecka w przedszkolu.", "Opłaty", "Do uzupełnienia",
+    ["Czesne", "Opłata wpisowa", "Wyżywienie", "Godziny dodatkowe", "Rabaty i zniżki"], bgcls="s-cream",
+    intro="Cennik zostanie opublikowany dopiero po przekazaniu go przez placówkę.", blob="b-sun")
+PAGES["rekrutacja"] = todo_page("rekrutacja", "Rekrutacja", "Chcesz zapisać dziecko? Zapytaj o szczegóły.", "Zapisy", "Do uzupełnienia",
+    ["Zasady przyjęć", "Terminy", "Wymagane dokumenty", "Dokumenty do pobrania", "Dzień adaptacyjny"], bgcls="s-mint", blob="b-sky")
+PAGES["opinie"] = todo_page("opinie", "Opinie", "Co mówią rodzice.", "Rodzice", "Do uzupełnienia",
+    [("Opinie rodziców", "Opublikujemy wyłącznie prawdziwe opinie, po uzyskaniu zgody ich autorów."), "Podziękowania", "Dodaj swoją opinię"], bgcls="s-peach")
 PAGES["galeria"] = dict(
   title=f"Galeria – {NAME}", desc="Galeria zdjęć Niepublicznego Przedszkola Żyrafka w Łodzi.", noindex=True,
   body=lambda R: (phero("galeria", "Galeria", "Zdjęcia z życia przedszkola.")
-    + section("s-peach", head("Zdjęcia", "Miejsce na prawdziwe zdjęcia") +
-        '<p class="about reveal" style="margin-bottom:1.8rem">Dodamy tu zdjęcia, gdy przedszkole je dostarczy.</p><div class="gal" data-stagger>' + "".join(shot(i) for i in range(1, 7)) + '</div>',
+    + section("s-sky", head("Zdjęcia", "Miejsce na prawdziwe zdjęcia") +
+        '<p class="about reveal" style="margin-bottom:1.8rem">Dodamy tu zdjęcia, gdy przedszkole je dostarczy.</p><div class="gal" data-stagger>' + "".join(shot(i) for i in range(1, 9)) + '</div>',
         sec_bg("b-white", "pos-tl", "pos-br"))
-    + CTA_CONTACT.replace("{R}", R)))
-
+    + CC(R)))
 PAGES["kontakt"] = dict(
-  title=f"Kontakt – {NAME}", desc="Kontakt z Niepublicznym Przedszkolem Żyrafka, ul. Maratońska 57a, 94-102 Łódź. Mapa i formularz.", ld=True,
-  body=lambda R: (phero("kontakt", "Kontakt", "Napisz do nas lub odwiedź nas na Polesiu.")
+  title=f"Kontakt – {NAME}", desc="Kontakt z Niepublicznym Przedszkolem Żyrafka, ul. Maratońska 57a, 94-102 Łódź. Umów spotkanie.", ld=True,
+  body=lambda R: (phero("kontakt", "Kontakt", "Umów spotkanie lub odwiedź nas na Polesiu.")
     + section("s-cream", '<div class="contact"><div class="reveal"><p class="eyebrow">Dane</p><h2>Jak się z nami skontaktować</h2>'
         f'<address class="about">{NAME}<br>ul. Maratońska 57a<br>94-102 Łódź</address>'
         '<div class="stack">' + todo("Telefon").replace("reveal", "") + todo("E-mail").replace("reveal", "") + todo("Godziny otwarcia").replace("reveal", "") + '</div>'
@@ -199,7 +218,7 @@ def main():
         open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(render(slug, p))
     urls = "".join(f"  <url><loc>{DOMAIN}{url_of(s)}</loc></url>\n" for s, p in PAGES.items() if not p.get("noindex"))
     open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write(
-        '<?xml version="1.0" encoding="UTF-8"?>\n<!-- TODO: zamień TWOJA-DOMENA.pl na docelową domenę; po uzupełnieniu treści usuń noindex z oferta/rekrutacja/galeria i dodaj je tutaj (tools/build.py) -->\n'
+        '<?xml version="1.0" encoding="UTF-8"?>\n<!-- TODO: zamień TWOJA-DOMENA.pl na docelową domenę; po uzupełnieniu treści usuń noindex z uzupełnionych podstron (kadra, program, cennik, rekrutacja, opinie, galeria) i dodaj je tutaj (tools/build.py) -->\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n')
     print("OK:", ", ".join(url_of(s) for s in PAGES))
 main()

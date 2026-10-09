@@ -15,4 +15,4 @@ Wyniki researchu: `docs/RESEARCH.md`. Szukaj komentarzy `TODO` w `index.html`:
 
 ## Struktura (wiele podstron)
 Podstrony generuje `python3 tools/build.py` (szablon CSS: `tools/style.template.css`, treści: słownik `PAGES`).
-Strony `oferta`, `rekrutacja`, `galeria` mają `noindex` i nie są w sitemapie, dopóki zawierają same kafelki „Do uzupełnienia”.
+Strony `kadra`, `program`, `cennik`, `rekrutacja`, `opinie`, `galeria` mają `noindex` i nie są w sitemapie, dopóki zawierają same kafelki „Do uzupełnienia”.

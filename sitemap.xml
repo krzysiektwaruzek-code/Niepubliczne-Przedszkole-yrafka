@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- TODO: zamień TWOJA-DOMENA.pl na docelową domenę; po uzupełnieniu treści usuń noindex z oferta/rekrutacja/galeria i dodaj je tutaj (tools/build.py) -->
+<!-- TODO: zamień TWOJA-DOMENA.pl na docelową domenę; po uzupełnieniu treści usuń noindex z uzupełnionych podstron (kadra, program, cennik, rekrutacja, opinie, galeria) i dodaj je tutaj (tools/build.py) -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://TWOJA-DOMENA.pl/</loc></url>
-  <url><loc>https://TWOJA-DOMENA.pl/o-przedszkolu/</loc></url>
+  <url><loc>https://TWOJA-DOMENA.pl/o-nas/</loc></url>
+  <url><loc>https://TWOJA-DOMENA.pl/placowka/</loc></url>
   <url><loc>https://TWOJA-DOMENA.pl/kontakt/</loc></url>
 </urlset>

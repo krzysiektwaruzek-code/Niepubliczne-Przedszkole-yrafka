@@ -215,3 +215,19 @@ h3{font-size:1.2rem;letter-spacing:-.01em}
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .js .reveal{opacity:1;transform:none}
 }
+
+/* v3: nawigacja jak na wielu stronach przedszkoli, mapa na kliknięcie, ciepłe hero */
+.header{background:rgba(255,255,255,.92)}
+.nav a:not(.btn){font-size:.95rem;padding:.5rem .7rem}
+.hero{background:radial-gradient(60% 70% at 85% 5%,#ffe3a3 0%,transparent 60%),radial-gradient(70% 70% at 10% 20%,#e3d7fb 0%,transparent 60%),linear-gradient(180deg,#d9ebff 0%,#ffe0e6 60%,var(--cream) 100%)}
+.tiles--quick{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.tile--link:nth-child(5){--c:var(--coral)}.tile--link:nth-child(6){--c:var(--teal)}.tile--link:nth-child(7){--c:var(--sun)}.tile--link:nth-child(8){--c:var(--plum-m)}
+.map-ph{min-height:clamp(300px,45vw,430px);display:grid;place-content:center;justify-items:center;gap:1rem;text-align:center;padding:1.5rem;background:repeating-linear-gradient(45deg,#eef6fc 0 16px,#e2eef8 16px 32px);color:var(--plum)}
+.map-ph p{margin:0;max-width:340px}
+@media (max-width:1180px){
+  .burger{display:block}
+  .nav{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:.5rem 1.25rem 1.25rem;display:none;box-shadow:0 20px 30px -20px rgba(45,22,80,.4)}
+  .nav.open{display:flex}
+  .nav a:not(.btn){padding:.95rem .5rem;border-radius:12px;font-size:1.02rem}
+  .nav .btn{margin:.8rem 0 0}
+}
