@@ -21,13 +21,15 @@ HILLS = ('<svg class="hills" viewBox="0 0 1440 220" preserveAspectRatio="none" a
          '<path class="h1" d="M0 120c180-70 360-70 540-20s360 60 540-10 270-40 360 0v130H0z"/>'
          '<path class="h2" d="M0 160c200-60 380-40 560 0s340 40 520-10 240-20 360 10v70H0z"/>'
          '<path class="h3" d="M0 200c240-40 480-30 720 0s480 20 720-10v30H0z"/></svg>')
-HERO_BG = ('<div class="bg" aria-hidden="true"><div class="patch"></div>'
-           '<div class="blob a"></div><div class="blob b"></div><div class="dots"></div><div class="ring float b"></div>'
-           + SUN + cloud("cloud1") + cloud("cloud2") + cloud("cloud3") +
-           '<i class="star s1 twinkle"></i><i class="star s2 twinkle b"></i><i class="star s3 twinkle c"></i><i class="star s4 twinkle b"></i>'
-           '<i class="conf k1 float"></i><i class="conf k2 float b"></i><i class="conf k3 float c"></i></div>')
+HERO_BG = ('<div class="bg" aria-hidden="true"><div class="blob a"></div><div class="blob b"></div>'
+           + SUN + cloud("cloud1") + cloud("cloud2") + '<i class="star s1 twinkle"></i></div>')
+_ACC = ['<div class="acc ring float b {p}"></div>', '<i class="acc star twinkle {p}"></i>',
+        '<svg class="acc d-svg drift {p}" width="150" height="68" viewBox="0 0 200 90" aria-hidden="true"><path fill="#fff" d="M40 80a30 30 0 010-60 40 40 0 0176-8 34 34 0 0136 26 27 27 0 01-4 42z"/></svg>',
+        '<svg class="acc squig float c {p}" width="120" height="30" viewBox="0 0 120 30" aria-hidden="true"><path d="M4 18q14-18 28 0t28 0 28 0 28 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>']
+_n = [0]
 def sec_bg(blob="b-white", pos="pos-tl", dots="pos-br"):
-    return f'<div class="bg" aria-hidden="true"><div class="patch"></div><div class="blob {blob} {pos}"></div><div class="dots {dots}"></div></div>'
+    acc = _ACC[_n[0] % len(_ACC)].replace("{p}", dots); _n[0] += 1
+    return f'<div class="bg" aria-hidden="true"><div class="blob {blob} {pos}"></div>{acc}</div>'
 
 # ---------- klocki ----------
 def todo(title, hint="Treść zostanie dodana po otrzymaniu informacji od placówki."):
@@ -195,7 +197,7 @@ def render(slug, p):
   <main id="main">
 {p["body"](R)}
   </main>
-  <footer class="footer"><div class="bg" aria-hidden="true"><div class="patch"></div></div><div class="wrap">
+  <footer class="footer"><div class="wrap">
     <div class="footer__grid">
       <div><h3>{NAME}</h3><p>ul. Maratońska 57a<br>94-102 Łódź</p></div>
       <div><h3>Strony</h3><ul>{foot_links}</ul></div>

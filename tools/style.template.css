@@ -245,3 +245,16 @@ h3{font-size:1.2rem;letter-spacing:-.01em}
 .tiles--quick{grid-template-columns:repeat(4,1fr)}
 @media (max-width:1000px){.tiles--quick{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:480px){.tiles--quick{grid-template-columns:1fr}}
+
+/* v5: minimalistyczne tło – pojedyncze, subtelne ozdoby */
+.patch,.dots,.conf,.bigspots{display:none!important}
+.acc{opacity:.75}
+.acc.pos-tl{left:5%;top:9%;right:auto;bottom:auto}
+.acc.pos-br{right:5%;bottom:9%;left:auto;top:auto}
+.acc.ring{width:84px;height:84px;color:rgba(25,181,165,.55)}
+.acc.star{width:26px;height:26px;background:var(--sun)}
+.acc.squig{color:rgba(255,107,87,.5)}
+.hero .blob.a{opacity:.3}.hero .blob.b{opacity:.4}
+.section .blob{opacity:.4}
+.star.s1{left:46%;top:16%}
+@media (max-width:860px){.acc{display:none}}
