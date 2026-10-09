@@ -21,7 +21,7 @@ HILLS = ('<svg class="hills" viewBox="0 0 1440 220" preserveAspectRatio="none" a
          '<path class="h1" d="M0 120c180-70 360-70 540-20s360 60 540-10 270-40 360 0v130H0z"/>'
          '<path class="h2" d="M0 160c200-60 380-40 560 0s340 40 520-10 240-20 360 10v70H0z"/>'
          '<path class="h3" d="M0 200c240-40 480-30 720 0s480 20 720-10v30H0z"/></svg>')
-HERO_BG = ('<div class="bg" aria-hidden="true"><div class="patch"></div><div class="bigspots float c"></div>'
+HERO_BG = ('<div class="bg" aria-hidden="true"><div class="patch"></div>'
            '<div class="blob a"></div><div class="blob b"></div><div class="dots"></div><div class="ring float b"></div>'
            + SUN + cloud("cloud1") + cloud("cloud2") + cloud("cloud3") +
            '<i class="star s1 twinkle"></i><i class="star s2 twinkle b"></i><i class="star s3 twinkle c"></i><i class="star s4 twinkle b"></i>'
@@ -179,7 +179,6 @@ def render(slug, p):
   <meta name="description" content="{p["desc"]}">
   {robots}<meta name="theme-color" content="#fffaf0">
   <!-- TODO: po ustaleniu domeny dodaj <link rel="canonical" href="{DOMAIN}{url_of(slug)}"> oraz og:url / og:image -->
-  <link rel="icon" href="{R}assets/favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website"><meta property="og:locale" content="pl_PL">
   <meta property="og:title" content="{p["title"]}"><meta property="og:description" content="{p["desc"]}">
   <meta name="twitter:card" content="summary"><meta name="twitter:title" content="{p["title"]}"><meta name="twitter:description" content="{p["desc"]}">
@@ -189,7 +188,7 @@ def render(slug, p):
 <body>
   <a class="skip" href="#main">Przejdź do treści</a>
   <header class="header" id="top"><div class="wrap header__in">
-    <a class="brand" href="{R or "./"}" aria-label="{NAME} – strona główna"><img src="{R}assets/favicon.svg" width="40" height="40" alt="" aria-hidden="true"><span>Przedszkole Żyrafka<small>Łódź · Polesie</small></span></a>
+    <a class="brand" href="{R or "./"}" aria-label="{NAME} – strona główna"><span>Przedszkole Żyrafka<small>Łódź · Polesie</small></span></a>
     <button class="burger" id="burger" aria-expanded="false" aria-controls="nav" aria-label="Otwórz menu"><span></span><span></span><span></span></button>
     <nav class="nav" id="nav" aria-label="Główna nawigacja">{nav}</nav>
   </div></header>
@@ -211,7 +210,7 @@ def render(slug, p):
 
 def main():
     global VER
-    spots = open(os.path.join(ROOT, "tools/spots.txt")).read().strip()
+    spots = open(os.path.join(ROOT, "tools/pattern.txt")).read().strip()
     css = open(os.path.join(ROOT, "tools/style.template.css"), encoding="utf-8").read().replace("%%SPOTS%%", spots)
     open(os.path.join(ROOT, "css/style.css"), "w", encoding="utf-8").write(css)
     VER = hashlib.md5((css + open(os.path.join(ROOT, "js/main.js"), encoding="utf-8").read()).encode()).hexdigest()[:8]

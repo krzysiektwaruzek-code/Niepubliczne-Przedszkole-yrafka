@@ -6,7 +6,7 @@
   --r:26px; --shadow:0 18px 40px -20px rgba(45,22,80,.35);
   --font:ui-rounded,"Nunito","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
   --head:"Trebuchet MS","Segoe UI",system-ui,sans-serif;
-  --spots:%%SPOTS%%;
+  --pat:%%SPOTS%%;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:90px}
@@ -26,8 +26,6 @@ address{font-style:normal}
 .header.scrolled{border-color:var(--line);box-shadow:0 8px 24px -16px rgba(45,22,80,.3)}
 .header__in{display:flex;align-items:center;justify-content:space-between;min-height:74px}
 .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;color:var(--plum);font-weight:700;line-height:1.15}
-.brand img{transition:transform .5s}
-.brand:hover img{transform:rotate(-12deg) scale(1.08)}
 .brand small{display:block;font-weight:600;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .nav{display:flex;align-items:center;gap:.3rem}
 .nav a:not(.btn){position:relative;text-decoration:none;color:var(--plum);font-weight:700;padding:.5rem .85rem;border-radius:999px;transition:background .2s,color .2s}
@@ -63,7 +61,7 @@ h3{font-size:1.2rem;letter-spacing:-.01em}
 /* background decor */
 .bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .bg>*{position:absolute}
-.patch{background-color:currentColor;-webkit-mask-image:var(--spots);mask-image:var(--spots);-webkit-mask-size:var(--sz,320px);mask-size:var(--sz,320px);-webkit-mask-repeat:repeat;mask-repeat:repeat}
+.patch{background-color:currentColor;-webkit-mask-image:var(--pat);mask-image:var(--pat);-webkit-mask-size:var(--sz,320px);mask-size:var(--sz,320px);-webkit-mask-repeat:repeat;mask-repeat:repeat}
 .blob{border-radius:50%;filter:blur(60px)}
 .dots{background-image:radial-gradient(currentColor 1.8px,transparent 2px);background-size:22px 22px}
 .ring{border-radius:50%;border:3px dashed currentColor}
@@ -86,7 +84,7 @@ h3{font-size:1.2rem;letter-spacing:-.01em}
 .hero{padding:clamp(3.5rem,9vw,7rem) 0 clamp(8rem,15vw,12rem);background:radial-gradient(60% 70% at 85% 5%,#ffe3a3 0%,transparent 60%),radial-gradient(60% 60% at 5% 90%,#c9f0e6 0%,transparent 60%),linear-gradient(180deg,#e4f4ff,var(--cream))}
 .phero{padding:clamp(3rem,7vw,5.5rem) 0 clamp(6rem,10vw,8rem);background:radial-gradient(60% 80% at 90% 0%,#ffe3a3 0%,transparent 60%),linear-gradient(180deg,#e9f5ff,var(--cream))}
 .hero .patch,.phero .patch{inset:-10%;color:rgba(255,107,87,.1);--sz:420px;transform:rotate(-8deg)}
-.hero .bigspots{width:min(48vw,560px);aspect-ratio:1;right:-5%;top:6%;color:rgba(255,201,60,.55);background-color:currentColor;-webkit-mask:var(--spots) center/100% 100% no-repeat;mask:var(--spots) center/100% 100% no-repeat;transform:rotate(12deg)}
+.hero .bigspots{width:min(48vw,560px);aspect-ratio:1;right:-5%;top:6%;color:rgba(255,201,60,.55);background-color:currentColor;-webkit-mask:var(--pat) center/100% 100% no-repeat;mask:var(--pat) center/100% 100% no-repeat;transform:rotate(12deg)}
 .hero .blob.a{width:340px;height:340px;right:6%;top:30%;background:#ffb7a8;opacity:.5}
 .hero .blob.b{width:300px;height:300px;left:-90px;top:10%;background:#b8e8ff;opacity:.7}
 .hero .dots{left:4%;bottom:26%;width:190px;height:150px;color:rgba(45,22,80,.2)}
@@ -232,3 +230,18 @@ h3{font-size:1.2rem;letter-spacing:-.01em}
   .nav .btn{margin:.8rem 0 0}
 }
 .d-svg{height:auto}
+
+/* v4: spokojne tło – drobne detale zamiast plam, miękkie gradienty */
+.patch{--sz:160px!important;transform:none!important;inset:0!important}
+.hero .patch,.phero .patch{color:rgba(45,22,80,.13)}
+.s-cream .patch{color:rgba(255,150,50,.38)}.s-sky .patch{color:rgba(40,130,200,.26)}
+.s-mint .patch{color:rgba(25,150,130,.3)}.s-peach .patch{color:rgba(255,107,87,.3)}
+.s-lilac .patch{color:rgba(74,42,122,.2)}.s-plum .patch{color:rgba(255,255,255,.14)}
+.footer .patch{color:rgba(255,255,255,.1)}
+.hero .blob.a{opacity:.35}.hero .blob.b{opacity:.5}
+.section .blob{opacity:.55}
+.hero{background:radial-gradient(60% 60% at 88% 8%,#fff0c2 0%,transparent 62%),linear-gradient(180deg,#dcefff 0%,#eaf3ff 45%,#fff3ea 80%,var(--cream) 100%)}
+.phero{background:radial-gradient(60% 70% at 90% 0%,#fff0c2 0%,transparent 62%),linear-gradient(180deg,#dcefff,var(--cream))}
+.tiles--quick{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1000px){.tiles--quick{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.tiles--quick{grid-template-columns:1fr}}
