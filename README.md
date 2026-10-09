@@ -12,3 +12,7 @@ Wyniki researchu: `docs/RESEARCH.md`. Szukaj komentarzy `TODO` w `index.html`:
 - polityka prywatności (link przy zgodzie w formularzu),
 - domena: canonical, `og:url`, `og:image`, `robots.txt`, `sitemap.xml` (zamień `TWOJA-DOMENA.pl`),
 - formularz: wpisz adres usługi w `data-endpoint` w `<form id="contact-form">`.
+
+## Struktura (wiele podstron)
+Podstrony generuje `python3 tools/build.py` (szablon CSS: `tools/style.template.css`, treści: słownik `PAGES`).
+Strony `oferta`, `rekrutacja`, `galeria` mają `noindex` i nie są w sitemapie, dopóki zawierają same kafelki „Do uzupełnienia”.

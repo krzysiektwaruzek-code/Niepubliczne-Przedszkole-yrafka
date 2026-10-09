@@ -1,9 +1,9 @@
 (function () {
   'use strict';
   document.documentElement.classList.add('js');
+  var $ = function (id) { return document.getElementById(id); };
 
-  var burger = document.getElementById('burger');
-  var nav = document.getElementById('nav');
+  var burger = $('burger'), nav = $('nav'), header = document.querySelector('.header');
   function setMenu(open) {
     nav.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', String(open));
@@ -13,30 +13,28 @@
   nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
 
+  function onScroll() { header.classList.toggle('scrolled', window.scrollY > 8); }
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
   var items = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-      });
-    }, { threshold: 0.12 });
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
     items.forEach(function (el) { io.observe(el); });
-  } else {
-    items.forEach(function (el) { el.classList.add('in'); });
-  }
+  } else { items.forEach(function (el) { el.classList.add('in'); }); }
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  var y = $('year'); if (y) y.textContent = new Date().getFullYear();
 
-  var form = document.getElementById('contact-form');
-  var status = document.getElementById('form-status');
+  var form = $('contact-form'), status = $('form-status');
+  if (!form) return;
   function say(msg, cls) { status.textContent = msg; status.className = 'form__status ' + cls; }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var bad = false;
     form.querySelectorAll('[required]').forEach(function (f) {
       var ok = f.type === 'checkbox' ? f.checked : f.checkValidity() && f.value.trim() !== '';
-      f.classList.toggle('err', !ok);
-      f.setAttribute('aria-invalid', String(!ok));
+      f.classList.toggle('err', !ok); f.setAttribute('aria-invalid', String(!ok));
       if (!ok && !bad) { bad = true; f.focus(); }
     });
     if (bad) { say('Uzupełnij poprawnie zaznaczone pola.', 'is-error'); return; }
